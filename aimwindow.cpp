@@ -12,11 +12,15 @@ AimWindow::AimWindow(QWidget *parent) :
     m_isPressRB(false),
     m_pen(new QPen()),
     m_line(new QLine(0,0,0,0)),
-    m_ruler(50)
+    m_ruler(50),
+    m_distance(0)
 {
     ui->setupUi(this);
-    setAttribute(Qt::WA_TranslucentBackground, true);
-    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint );//无边框  //置顶，还是只有换成win32的API
+    setAttribute(Qt::WA_TranslucentBackground );//透明背景
+
+    setMouseTracking(false);
     m_pen->setColor(QColor(255,0,0,255));
     m_pen->setStyle(Qt::SolidLine);
     m_pen->setWidth(3);
@@ -46,6 +50,7 @@ void AimWindow::mousePressEvent(QMouseEvent *e){
     if (e->button() == Qt::LeftButton){
         m_isPressLB = !m_isPressLB ;
         m_line->setP1(e->pos());
+        m_distance = countDistance();
         update();
     }
 
@@ -62,6 +67,7 @@ void AimWindow::mouseReleaseEvent(QMouseEvent *e){
 void AimWindow::mouseMoveEvent(QMouseEvent *e){
     if (m_isPressLB){
         m_line->setP2(e->pos());
+        m_distance = countDistance();
         update();
     }
     if (e->button() == Qt::RightButton){
@@ -81,28 +87,26 @@ void AimWindow::paintEvent(QPaintEvent *e){
     painter.setPen(*m_pen);
     painter.drawLine(this->width() - 100 - m_ruler , this->height()-100 ,this->width() - 100 , this->height() -100);
     painter.drawLine(*m_line);
-    painter.drawText(m_line->p2().x() , m_line->p2().y()-10 ,  "* 33 = "  + QString::number(this->countDistance() * 33));
-    painter.drawText(m_line->p2().x() , m_line->p2().y()    ,  "*100 = " + QString::number(this->countDistance() * 100));
-    painter.drawText(m_line->p2().x() , m_line->p2().y()+10  , "*300 = " + QString::number(this->countDistance() * 300));
+    painter.drawText(m_line->p2().x() , m_line->p2().y()-10 ,  "* 33 = "  + QString::number(m_distance / m_ruler * 33));
+    painter.drawText(m_line->p2().x() , m_line->p2().y()    ,  "*100 = " + QString::number(m_distance / m_ruler * 100));
+    painter.drawText(m_line->p2().x() , m_line->p2().y()+10  , "*300 = " + QString::number(m_distance / m_ruler * 300));
     painter.drawText(m_line->p2().x() , m_line->p2().y()+20  , "Angle= " + QString::number(this->countAngle()));
 }
 
 double AimWindow::countDistance(){
-    double length = sqrt(m_line->dx() * m_line->dx() + m_line->dy() * m_line->dy()) / m_ruler ;
-    return length;
+    return sqrt(m_line->dx() * m_line->dx() + m_line->dy() * m_line->dy());
 }
 
 double AimWindow::countAngle(){
     //qDebug()<< m_line->dx() << m_line->dy();
     QLine line0(m_line->x1() , m_line->y1() ,  m_line->x1() , m_line->y1() - 100);
     double vMul = (m_line->dx() * line0.dx() + m_line->dy() * line0.dy());
-    double cosa = vMul /
-            (sqrt(m_line->dx()*m_line->dx() + m_line->dy() * m_line->dy())* sqrt(line0.dx()*line0.dx() + line0.dy()*line0.dy()));
+    double cosa = vMul /(m_distance * 100);
     // double sina = m_line->dx() / sqrt((m_line->dx()*m_line->dx() + m_line->dy() * m_line->dy()));
     qDebug() << cosa << vMul ;
     double radian = acos(cosa);
     double angle = radian * 180 / Pi ;
-    if (m_line->dx() > 0){
+    if (m_line->dx() < 0){
        angle = 360 -  angle;
     }
     return  angle ;

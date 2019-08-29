@@ -7,12 +7,13 @@ LRESULT CALLBACK keyProc(int nCode, WPARAM wParam, LPARAM lParam){
     KBDLLHOOKSTRUCT *e = (KBDLLHOOKSTRUCT *)lParam ;
     if (HC_ACTION == nCode && GetAsyncKeyState((int)e->vkCode) & 0x8000){
         switch (e->vkCode) {
-        case VK_F5:
+        case VK_UP:
             AimWindow::getInstance()->setAlphaValue();
             break;
-        case VK_F6:
+        case VK_LEFT:
+
             break;
-        case VK_F7:
+        case VK_DOWN:
             AimWindow::delInstance();
             qApp->quit();
             break;

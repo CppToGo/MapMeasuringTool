@@ -41,6 +41,7 @@ private:
     char m_alpha;
     char m_minAlpha;
     static AimWindow* m_Instance ;
+    double m_distance ;
 protected:
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);

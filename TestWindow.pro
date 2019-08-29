@@ -27,11 +27,13 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         aimwindow.cpp \
-        win32hook.cpp
+        win32hook.cpp \
+    mil.cpp
 
 HEADERS += \
         aimwindow.h \
-        win32hook.h
+        win32hook.h \
+    mil.h
 
 FORMS += \
         aimwindow.ui
