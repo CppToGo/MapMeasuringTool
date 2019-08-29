@@ -1,0 +1,3 @@
+#ignore generated Qt project files
+*pro*
+~*
