@@ -10,10 +10,10 @@ LRESULT CALLBACK keyProc(int nCode, WPARAM wParam, LPARAM lParam){
         case VK_UP:
             AimWindow::getInstance()->setAlphaValue();
             break;
-        case VK_LEFT:
-
-            break;
         case VK_DOWN:
+            AimWindow::getInstance()->setHidden(!AimWindow::getInstance()->isHidden());
+            break;
+        case VK_LEFT:
             AimWindow::delInstance();
             qApp->quit();
             break;

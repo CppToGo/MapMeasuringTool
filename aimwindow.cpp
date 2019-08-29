@@ -13,7 +13,8 @@ AimWindow::AimWindow(QWidget *parent) :
     m_pen(new QPen()),
     m_line(new QLine(0,0,0,0)),
     m_ruler(50),
-    m_distance(0)
+    m_distance(0),
+    m_mil(new Mil())
 {
     ui->setupUi(this);
 
@@ -39,6 +40,7 @@ AimWindow::~AimWindow()
     delete ui;
     delete m_pen;
     delete m_line;
+    delete m_mil;
     hookClose();
     qDebug()<< "quit ~AimWindow";
 }
@@ -87,10 +89,11 @@ void AimWindow::paintEvent(QPaintEvent *e){
     painter.setPen(*m_pen);
     painter.drawLine(this->width() - 100 - m_ruler , this->height()-100 ,this->width() - 100 , this->height() -100);
     painter.drawLine(*m_line);
-    painter.drawText(m_line->p2().x() , m_line->p2().y()-10 ,  "* 33 = "  + QString::number(m_distance / m_ruler * 33));
-    painter.drawText(m_line->p2().x() , m_line->p2().y()    ,  "*100 = " + QString::number(m_distance / m_ruler * 100));
-    painter.drawText(m_line->p2().x() , m_line->p2().y()+10  , "*300 = " + QString::number(m_distance / m_ruler * 300));
-    painter.drawText(m_line->p2().x() , m_line->p2().y()+20  , "Angle= " + QString::number(this->countAngle()));
+    //painter.drawText(m_line->p2().x() + 10 , m_line->p2().y()+20  ,  "* 33 = "  + QString::number(m_distance / m_ruler * 33));
+    painter.drawText(m_line->p2().x() + 10 , m_line->p2().y()+10  ,  "*100 = " + QString::number(m_distance / m_ruler * 100));
+    painter.drawText(m_line->p2().x() + 10 , m_line->p2().y()     , "*300 = " + QString::number(m_distance / m_ruler * 300));
+    painter.drawText(m_line->p2().x() + 10 , m_line->p2().y()-10  , "Angle= " + QString::number(this->countAngle()));
+    painter.drawText(m_line->p2().x() + 10 , m_line->p2().y()-20  , "mil= " + QString::number(m_mil->getMil(m_distance / m_ruler * 100)));
 }
 
 double AimWindow::countDistance(){

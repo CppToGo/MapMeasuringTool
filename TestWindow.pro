@@ -42,3 +42,12 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    icon/favicon128_128.ico \
+    icon/favicon16_16.ico \
+    icon/favicon32_32.ico \
+    icon/favicon48_48.ico \
+    icon/favicon64_64.ico
+
+RC_ICONS =  icon/favicon128_128.ico

@@ -7,14 +7,16 @@
 #include <QStringList>
 #include <QList>
 
-class mil
+class Mil
 {
 public:
-  mil();
-  ~mil();
-  int getMil(int A1 , int B1, int A2, int B2 , int distance);
+    Mil();
+    ~Mil();
+
+    int getMil(double distance);
 private:
-  QList<QPoint *> m_milList;
+    int countMil(QPoint* A, QPoint *B  , int distance);
+    QList<QPoint *> m_milList;
 };
 
 #endif // MIL_H

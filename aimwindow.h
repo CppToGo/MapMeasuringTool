@@ -9,7 +9,7 @@
 #include <QPainter>
 #include <math.h>
 #include <QtDebug>
-
+#include <mil.h>
 #define Pi 3.1415926
 
 namespace Ui {
@@ -42,6 +42,7 @@ private:
     char m_minAlpha;
     static AimWindow* m_Instance ;
     double m_distance ;
+    Mil * m_mil;
 protected:
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
