@@ -35,3 +35,7 @@
 ![对比示意图](/MarkdownResources/对比示意图.png)
 
 # 教学完成，可以自己玩了
+
+> GitHub: [SMT_Alpha0.1.0.zip](https://github.com/CppToGo/SquadPlugin/files/3558628/SMT_Alpha0.1.0.zip)  （特慢）  
+> 下载源码: [SMT_Alpha0.1.0.zip](https://github.com/CppToGo/SquadPlugin/releases)  （慢）  
+> 百度网盘: [SMT_Alpha0.1.0.zip](https://pan.baidu.com/s/1bgAbescZWx21xCuwUH6DsA) （这个比较快）  
