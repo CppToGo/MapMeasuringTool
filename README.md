@@ -1,3 +1,4 @@
+![GitHub Logoa](/icon/favicon128_128.ico)
 # SquadPlugin
 这是一个squad的辅助插件，不是外挂。
 
