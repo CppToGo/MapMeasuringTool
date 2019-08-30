@@ -1,7 +1,8 @@
 # SquadPlugin
 这是一个squad的辅助插件，不是外挂。
 
-[SMT_Alpha0.1.0.zip](https://github.com/CppToGo/SquadPlugin/files/3558628/SMT_Alpha0.1.0.zip)
+[github  SMT_Alpha0.1.0.zip](https://github.com/CppToGo/SquadPlugin/files/3558628/SMT_Alpha0.1.0.zip)
+[百度网盘 SMT_Alpha0.1.0.zip](https://pan.baidu.com/s/1bgAbescZWx21xCuwUH6DsA)
 # 关于Super Measuring Tool的介绍（以下简称SMT）
 这是第一版，也有很大可能就是最后一版，只要有需要将持续改进；
 ## 标尺
