@@ -1,5 +1,5 @@
 ![GitHub Logoa](/icon/favicon128_128.ico)
-# SquadPlugin
+# Super Measuring Tool
 这是一个squad的辅助插件，不是外挂。
 
 > GitHub: [SMT_Alpha0.1.0.zip](https://github.com/CppToGo/SquadPlugin/files/3558628/SMT_Alpha0.1.0.zip)  （特慢）  
