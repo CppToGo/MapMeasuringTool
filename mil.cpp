@@ -1,11 +1,11 @@
 #include "mil.h"
 #include <QDebug>
-
+#include <QCoreApplication>
 Mil::Mil()
 {
-  QSettings * config = new QSettings("../Mil.ini", QSettings::IniFormat);
+  QSettings * config = new QSettings(QCoreApplication::applicationDirPath() +"/config/Mil.ini", QSettings::IniFormat);
   config->beginGroup("MIL");
-  //qDebug()<< "config" << config->allKeys();
+  qDebug()<< "config" << config->allKeys();
   for (int i = MIN_DISTANCE ; i <= MAX_DISTANCE ; i ++ ){
         if (config->value(QString::number(i)).toInt() > 0 ){
           m_milList.append(new QPoint(i , config->value(QString::number(i)).toInt() ));

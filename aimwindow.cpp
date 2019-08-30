@@ -1,7 +1,7 @@
 #include "aimwindow.h"
 #include "ui_aimwindow.h"
 #include "win32hook.h"
-
+#include <QDir>
 extern HHOOK keyHook;
 AimWindow* AimWindow::m_Instance = nullptr ;
 
@@ -10,9 +10,9 @@ AimWindow::AimWindow(QWidget *parent) :
     ui(new Ui::AimWindow),
     m_isPressLB(false),
     m_isPressRB(false),
-    m_pen(new QPen()),
+    m_pen(new QPen(QColor(255,0,0,80) , 2 , Qt::SolidLine , Qt::RoundCap, Qt::RoundJoin)),
     m_line(new QLine(0,0,0,0)),
-    m_ruler(50),
+    m_ruler(100),
     m_distance(0),
     m_mil(new Mil())
 {
@@ -22,9 +22,6 @@ AimWindow::AimWindow(QWidget *parent) :
     setAttribute(Qt::WA_TranslucentBackground );//透明背景
 
     setMouseTracking(false);
-    m_pen->setColor(QColor(255,0,0,255));
-    m_pen->setStyle(Qt::SolidLine);
-    m_pen->setWidth(3);
 #if WIN32
     m_minAlpha = 1;
 #else
@@ -85,15 +82,30 @@ void AimWindow::keyPressEvent(QKeyEvent *e){
 
 void AimWindow::paintEvent(QPaintEvent *e){
     QPainter painter(this);
+    painter.save();
     painter.fillRect(this->rect() , QColor(255,255,255,m_alpha));
     painter.setPen(*m_pen);
-    painter.drawLine(this->width() - 100 - m_ruler , this->height()-100 ,this->width() - 100 , this->height() -100);
+    painter.drawLine(this->width() - 100 - m_ruler , this->height()-50 ,this->width() - 100 , this->height() -50);
     painter.drawLine(*m_line);
-    //painter.drawText(m_line->p2().x() + 10 , m_line->p2().y()+20  ,  "* 33 = "  + QString::number(m_distance / m_ruler * 33));
-    painter.drawText(m_line->p2().x() + 10 , m_line->p2().y()+10  ,  "*100 = " + QString::number(m_distance / m_ruler * 100));
-    painter.drawText(m_line->p2().x() + 10 , m_line->p2().y()     , "*300 = " + QString::number(m_distance / m_ruler * 300));
-    painter.drawText(m_line->p2().x() + 10 , m_line->p2().y()-10  , "Angle= " + QString::number(this->countAngle()));
-    painter.drawText(m_line->p2().x() + 10 , m_line->p2().y()-20  , "mil= " + QString::number(m_mil->getMil(m_distance / m_ruler * 100)));
+    painter.restore();
+
+    painter.save();
+    painter.setFont(QFont("Arial Rounded MT Bold", 10));
+    painter.setPen(QColor(255, 0 ,0));
+    painter.drawText(this->width() - 200   ,  this->height() - 35, "（100m）标尺 = " + QString::number(m_ruler) + " px" );
+    painter.drawText(m_line->p2().x() + 10 , m_line->p2().y()+15  , "距离 = " + QString::number(m_distance / m_ruler * 100) + " m");
+    painter.drawText(m_line->p2().x() + 10 , m_line->p2().y()     , "方位 = " + QString::number(this->countAngle()) + " °");
+    painter.drawText(m_line->p2().x() + 10 , m_line->p2().y()-15  , "密位 = " + QString::number(m_mil->getMil(m_distance / m_ruler * 100)) +" mil");
+    painter.restore();
+
+    if (m_isPressRB){
+        painter.save();
+        painter.setFont(QFont("Arial Rounded MT Bold", 10));
+        painter.setPen(QColor(0, 0 ,255,150));
+        //if you contributed for this project, you can put your name here.
+        painter.drawText(0,10,"Made by Johnny_焦尼");
+        painter.restore();
+    }
 }
 
 double AimWindow::countDistance(){
@@ -106,7 +118,7 @@ double AimWindow::countAngle(){
     double vMul = (m_line->dx() * line0.dx() + m_line->dy() * line0.dy());
     double cosa = vMul /(m_distance * 100);
     // double sina = m_line->dx() / sqrt((m_line->dx()*m_line->dx() + m_line->dy() * m_line->dy()));
-    qDebug() << cosa << vMul ;
+    //qDebug() << cosa << vMul ;
     double radian = acos(cosa);
     double angle = radian * 180 / Pi ;
     if (m_line->dx() < 0){
@@ -117,11 +129,23 @@ double AimWindow::countAngle(){
 
 
 void AimWindow::wheelEvent(QWheelEvent *e){
-    if (e->delta() > 0 ){
-        m_ruler ++ ;
-    }else if (e->delta() < 0 && m_ruler > 0 ){
-        m_ruler -- ;
+    if (e->delta() > 0){
+        if (e->modifiers() & Qt::ShiftModifier){
+            m_ruler ++ ;
+          }else{
+            m_ruler += 10 ;
+
+          }
+    }else if (e->delta() < 0 && m_ruler > 1 ){
+        if (e->modifiers() & Qt::ShiftModifier){
+            m_ruler -- ;
+          }else{
+            m_ruler -= 10 ;
+          }
     }
+    if(m_ruler <=0){
+        m_ruler = 1;
+      }
     update();
 }
 
@@ -155,3 +179,23 @@ void AimWindow::setAlphaValue(){
     m_alpha = m_alpha > 0 ? 0 : m_minAlpha;
     update();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
