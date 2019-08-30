@@ -10,7 +10,7 @@ AimWindow::AimWindow(QWidget *parent) :
     ui(new Ui::AimWindow),
     m_isPressLB(false),
     m_isPressRB(false),
-    m_pen(new QPen(QColor(255,0,0,80) , 2 , Qt::SolidLine , Qt::RoundCap, Qt::RoundJoin)),
+    m_pen(new QPen(QColor(255,0,0,150) , 3 , Qt::SolidLine , Qt::RoundCap, Qt::RoundJoin)),
     m_line(new QLine(0,0,0,0)),
     m_ruler(100),
     m_distance(0),
