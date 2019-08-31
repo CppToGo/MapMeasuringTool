@@ -2,6 +2,11 @@
 # Super Measuring Tool
 这是一个squad的辅助插件，不是外挂。
 
+#Alpha0.1.1版本修改：
+> 本站下载  [SMT_Alpha0.1.1.zip](https://github.com/CppToGo/SquadPlugin/files/3562085/SMT_Alpha0.1.1.zip)  
+> 百度网盘  [所有版本都在这里，以后也都发这个地址 SMT_Alpha0.1.1.zip](https://pan.baidu.com/s/1BH1IDVoaA9STs1l_RvHYbA)
+
+#Alpha0.1.0版本：
 > GitHub: [SMT_Alpha0.1.0.zip](https://github.com/CppToGo/SquadPlugin/files/3558628/SMT_Alpha0.1.0.zip)  （特慢）  
 > 下载源码: [SMT_Alpha0.1.0.zip](https://github.com/CppToGo/SquadPlugin/releases)  （慢）  
 > 百度网盘: [SMT_Alpha0.1.0.zip](https://pan.baidu.com/s/1bgAbescZWx21xCuwUH6DsA) （这个比较快）  
