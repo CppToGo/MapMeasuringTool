@@ -1,7 +1,9 @@
 #include "aimwindow.h"
 #include "ui_aimwindow.h"
 #include "win32hook.h"
-#include <QDir>
+#include <QCursor>
+#include <QBitmap>
+
 extern HHOOK keyHook;
 AimWindow* AimWindow::m_Instance = nullptr ;
 
@@ -20,8 +22,11 @@ AimWindow::AimWindow(QWidget *parent) :
 
     setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint );//无边框  //置顶，还是只有换成win32的API
     setAttribute(Qt::WA_TranslucentBackground );//透明背景
-
     setMouseTracking(false);
+    QBitmap bitmap = QBitmap(QCoreApplication::applicationDirPath() + "/icon/Cursor_cross.png");//光标加载
+    QBitmap bitmap_mask = QBitmap(QCoreApplication::applicationDirPath() + "/icon/Cursor_cross_mask.png");
+    setCursor(QCursor(bitmap , bitmap_mask, -1, -1));
+
 #if WIN32
     m_minAlpha = 1;
 #else
@@ -90,7 +95,7 @@ void AimWindow::paintEvent(QPaintEvent *e){
     painter.restore();
 
     painter.save();
-    painter.setFont(QFont("Arial Rounded MT Bold", 10));
+    painter.setFont(QFont("Arial", 10));
     painter.setPen(QColor(255, 0 ,0));
     painter.drawText(this->width() - 200   ,  this->height() - 35, "（100m）标尺 = " + QString::number(m_ruler) + " px" );
     painter.drawText(m_line->p2().x() + 10 , m_line->p2().y()+15  , "距离 = " + QString::number(m_distance / m_ruler * 100) + " m");

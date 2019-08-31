@@ -10,15 +10,22 @@
     <height>300</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+    <weight>50</weight>
+    <bold>false</bold>
+   </font>
+  </property>
   <property name="cursor">
    <cursorShape>CrossCursor</cursorShape>
   </property>
   <property name="windowTitle">
-   <string>AimWindow</string>
+   <string>SuperMeasuringTool</string>
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>:/icon/ico128_128.png</normaloff>:/icon/ico128_128.png</iconset>
+    <normaloff>icon/favicon128_128.ico</normaloff>icon/favicon128_128.ico</iconset>
   </property>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
