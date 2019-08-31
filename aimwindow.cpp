@@ -74,10 +74,10 @@ void AimWindow::mouseMoveEvent(QMouseEvent *e){
     }
 }
 void AimWindow::keyPressEvent(QKeyEvent *e){
-    if (e->key() == Qt::Key_Space){
-        m_alpha = m_alpha > 0 ? 0 : m_minAlpha;
-        update();
-    }
+//    if (e->key() == Qt::Key_Space){
+//        m_alpha = m_alpha > 0 ? 0 : m_minAlpha;
+//        update();
+//    }
 }
 
 void AimWindow::paintEvent(QPaintEvent *e){
@@ -130,17 +130,16 @@ double AimWindow::countAngle(){
 
 void AimWindow::wheelEvent(QWheelEvent *e){
     if (e->delta() > 0){
-        if (e->modifiers() & Qt::ShiftModifier){
-            m_ruler ++ ;
-          }else{
-            m_ruler += 10 ;
-
+        if ( e->modifiers() & Qt::ShiftModifier){
+            m_ruler += 0.1 ;
+          }else {
+            m_ruler += 5 ;
           }
     }else if (e->delta() < 0 && m_ruler > 1 ){
         if (e->modifiers() & Qt::ShiftModifier){
-            m_ruler -- ;
+            m_ruler -= 0.1 ;
           }else{
-            m_ruler -= 10 ;
+            m_ruler -= 5 ;
           }
     }
     if(m_ruler <=0){
