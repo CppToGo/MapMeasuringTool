@@ -1,5 +1,5 @@
 ![GitHub Logoa](/icon/favicon128_128.ico)
-# SquadPlugin
+# Super Measuring Tool
 这是一个squad的辅助插件，不是外挂。
 
 > GitHub: [SMT_Alpha0.1.0.zip](https://github.com/CppToGo/SquadPlugin/files/3558628/SMT_Alpha0.1.0.zip)  （特慢）  
@@ -29,8 +29,13 @@
 ## 矫正标尺
 - 1 按照100米的比例尺去矫正标尺, 图左图测得103米，实际只有100米，就需要滑动滚轮，调整标尺，由于调整幅度小，所以按住Shift进行微调，调整后为右图
 ![标尺矫正示意图](/MarkdownResources/标尺示意图.png)
-- 2 关于标尺矫正，还有一种
+- 2 关于标尺矫正，还有一种：拉出一段900m的距离，但如左图测得是526m，现在矫正标尺到测定距离像是为900m（如右图），现在标尺的比列就是游戏中900m的标尺。这样就可以在大图上进行测距。
+![标尺矫正示意图2](/MarkdownResources/标尺矫正2.png)
 - 3 与玩家常用的 SquadMc 对比 ，误差值在接受范围内。
 ![对比示意图](/MarkdownResources/对比示意图.png)
 
 # 教学完成，可以自己玩了
+
+> GitHub: [SMT_Alpha0.1.0.zip](https://github.com/CppToGo/SquadPlugin/files/3558628/SMT_Alpha0.1.0.zip)  （特慢）  
+> 下载源码: [SMT_Alpha0.1.0.zip](https://github.com/CppToGo/SquadPlugin/releases)  （慢）  
+> 百度网盘: [SMT_Alpha0.1.0.zip](https://pan.baidu.com/s/1bgAbescZWx21xCuwUH6DsA) （这个比较快）  
