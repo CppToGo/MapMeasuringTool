@@ -11,14 +11,17 @@ LRESULT CALLBACK keyProc(int nCode, WPARAM wParam, LPARAM lParam){
             AimWindow::getInstance()->setAlphaValue();
             break;
         case VK_DOWN:
-            AimWindow::getInstance()->setHidden(!AimWindow::getInstance()->isHidden());
+           if(!AimWindow::getInstance()->isMinimized()){
+               AimWindow::getInstance()->showMinimized();
+           }else{
+               AimWindow::getInstance()->showMaximized();
+           }
             break;
         case VK_LEFT:
             AimWindow::delInstance();
             qApp->quit();
             break;
         }
-
     }
     return CallNextHookEx(keyHook , nCode , wParam , lParam);
 }

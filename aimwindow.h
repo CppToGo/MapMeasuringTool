@@ -9,7 +9,7 @@
 #include <QPainter>
 #include <math.h>
 #include <QtDebug>
-#include <mil.h>
+#include <config.h>
 #define Pi 3.1415926
 
 namespace Ui {
@@ -27,7 +27,7 @@ public:
     static AimWindow* getInstance();
     static void delInstance();
     void setAlphaValue();
-    double countDistance();
+    double getDistance();
     double countAngle();
 private:
     explicit AimWindow(QWidget *parent = nullptr);
@@ -36,13 +36,14 @@ private:
     bool m_isPressLB;
     bool m_isPressRB;
     QPen * m_pen ;
-    QLine * m_line ;
+    QLineF *m_line ;
+    QLineF *m_normalLine;
     double m_ruler;
     char m_alpha;
     char m_minAlpha;
     static AimWindow* m_Instance ;
-    double m_distance ;
-    Mil * m_mil;
+    Config * m_config;
+    bool m_isUsingTool ;
 protected:
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);

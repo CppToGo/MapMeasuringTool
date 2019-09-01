@@ -1,6 +1,6 @@
 #include "aimwindow.h"
 #include <QApplication>
-#include <mil.h>
+#include <config.h>
 #if WIN32
 #include <windows.h>
 #endif

@@ -25,15 +25,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        config.cpp \
         main.cpp \
         aimwindow.cpp \
-        win32hook.cpp \
-    mil.cpp
+        win32hook.cpp
 
 HEADERS += \
         aimwindow.h \
-        win32hook.h \
-    mil.h
+        config.h \
+        win32hook.h
 
 FORMS += \
         aimwindow.ui
