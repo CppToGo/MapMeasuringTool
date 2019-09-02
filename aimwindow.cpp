@@ -13,7 +13,6 @@ AimWindow::AimWindow(QWidget *parent) :
     ui(new Ui::AimWindow),
     m_isPressLB(false),
     m_isPressRB(false),
-    m_pen(new QPen(QColor(255,0,0,150) , 3 , Qt::SolidLine , Qt::FlatCap, Qt::MiterJoin)),
     m_line(new QLineF(0,0,0,0)),
     m_normalLine(new QLineF(0,0,0,-100)),
     m_ruler(100),
@@ -28,6 +27,7 @@ AimWindow::AimWindow(QWidget *parent) :
     QBitmap bitmap = QBitmap(QCoreApplication::applicationDirPath() + "/icon/Cursor_cross.png");//光标加载
     QBitmap bitmap_mask = QBitmap(QCoreApplication::applicationDirPath() + "/icon/Cursor_cross_mask.png");
     setCursor(QCursor(bitmap , bitmap_mask, -1, -1));
+    m_pen = new QPen(QColor(255,0,0,150) , m_config->getConfigValue("Paint", "LineWidth").toInt() , Qt::SolidLine , Qt::FlatCap, Qt::MiterJoin);
 
 #if WIN32
     m_minAlpha = 1;
@@ -57,6 +57,7 @@ void AimWindow::mousePressEvent(QMouseEvent *e){
     if (e->button() == Qt::LeftButton){
         m_isPressLB = !m_isPressLB ;
         m_line->setP1(e->pos());
+        m_normalLine->setLine(m_line->x1() , m_line->y1() ,  m_line->x1() , m_line->y1() - m_line->length()); //设置法线
         update();
     }
 
@@ -81,18 +82,15 @@ void AimWindow::mouseMoveEvent(QMouseEvent *e){
     }
 }
 void AimWindow::keyPressEvent(QKeyEvent *e){
-    qDebug()<<  e->key() << VK_F1 ;
-    if (e->key() == m_config->getConfigValue("KeyBoard", "33mRuler").toInt()){
-        m_ruler =  m_line->length() * 100 / 33 ;
+    qDebug()<<  e->key() << m_config->getConfigValue("KeyBoard", "100mRuler").toInt() ;
+    if (e->key() == m_config->getConfigValue("KeyBoard", "KeyRuler1").toInt()){
+        m_ruler =  m_line->length() * 100 / m_config->getConfigValue("KeyBoard", "Ruler1").toDouble() ;
     }
-    if (e->key() == m_config->getConfigValue("KeyBoard", "100mRuler").toInt()){
-        m_ruler =  m_line->length() ;
+    if (e->key() == m_config->getConfigValue("KeyBoard", "KeyRuler2").toInt()){
+        m_ruler =  m_line->length() * 100 / m_config->getConfigValue("KeyBoard", "Ruler2").toDouble() ;
     }
-    if (e->key() == m_config->getConfigValue("KeyBoard", "300mRuler").toInt()){
-        m_ruler =  m_line->length() * 100 / 300 ;
-    }
-    if (e->key() == m_config->getConfigValue("KeyBoard", "900mRuler").toInt()){
-        m_ruler =  m_line->length() * 100 / 900 ;
+    if (e->key() == m_config->getConfigValue("KeyBoard", "KeyRuler3").toInt()){
+        m_ruler =  m_line->length() * 100 / m_config->getConfigValue("KeyBoard", "Ruler3").toDouble() ;
     }
     update();
 }
@@ -109,36 +107,42 @@ void AimWindow::paintEvent(QPaintEvent *e){
     painter.save();
     painter.fillRect(this->rect() , QColor(255,255,255,m_alpha));
     painter.setPen(*m_pen);
-    painter.drawLine(this->width() - 100 - m_ruler , this->height()-50 ,this->width() - 100 , this->height() -50);
-    if(m_isUsingTool && m_line->length() > 0  ){
-        painter.drawLine(*m_line);
-        //计算三角形的三个点
-        QLineF v = m_line->unitVector();
-        v.setLength(15);
-        //qDebug()<< v.length();
-        v.translate(m_line->dx() - v.dx() , m_line->dy() - v.dy());
-        QLineF n = v.normalVector();
-        //n.setLength(n.length() *0.5);
-        n.translate(n.dx() / -2.0 , n.dy() / -2.0);
-        QPolygonF arrow = QPolygonF();
-        arrow.append(m_line->p2());
-        arrow.append(n.p2());
-        arrow.append(n.p1());
-        arrow.append(m_line->p2());
-        QPainterPath path ;
-        path.addPolygon(arrow);
-        painter.setBrush(QBrush(QColor(m_pen->color())));
-        painter.drawPath(path);
+    if (m_config->getConfigValue("Paint","isPaintRuler").toBool()){
+        painter.drawLine(this->width() - 100 - m_ruler , this->height()-50 ,this->width() - 100 , this->height() -50);
+    }
+    if((m_isUsingTool | m_config->getConfigValue("Paint", "isPaintLine").toBool() )&& m_line->length() > 0  ){
+        paintArrowLine(painter, *m_line);
+//        painter.save();
+        painter.setPen(QPen(m_pen->color(),m_pen->width(), Qt::DashLine , m_pen->capStyle(), m_pen->joinStyle()));
+        if(m_config->getConfigValue("Paint","isPaintMaxCircle").toBool()){
+            painter.drawEllipse(m_line->p1(),m_line->length(), m_line->length());
+        }
+        if(m_config->getConfigValue("Paint","isPaint100Circle").toBool()){
+            for ( int i = 1 ; i <= (int)(Dis / 100) ; i ++ ){
+                painter.drawText(m_line->p1().x() + m_ruler * i + 5 ,m_line->p1().y(), QString::number(i));
+                painter.drawText(m_line->p1().x() - m_ruler * i - 10 ,m_line->p1().y(), QString::number(i));
+                painter.drawText(m_line->p1().x() ,m_line->p1().y() + m_ruler * i + 10, QString::number(i));
+                painter.drawText(m_line->p1().x() ,m_line->p1().y() - m_ruler * i - 5, QString::number(i));
+                painter.drawEllipse(m_line->p1() , m_ruler * i,m_ruler * i);
+            }
+        }
+//        painter.restore();
     }
     painter.restore();
 
     painter.save();
-    painter.setFont(QFont("Arial", 10));
+    painter.setFont(QFont(m_config->getConfigValue("Paint","FontStyle").toString(), m_config->getConfigValue("Paint","FontSize").toInt()));
     painter.setPen(QColor(255, 0 ,0));
-    painter.drawText(this->width() - 200  , this->height()-  65 , "距离 = " + QString::number(Dis) + " m");
-    painter.drawText(this->width() - 200  , this->height()-  80 , "方位 = " + QString::number(Ang) + " °");
-    painter.drawText(this->width() - 200  , this->height()-  95 , "密位 = " + QString::number(Mil) +" mil");
-    painter.drawText(this->width() - 200  , this->height()-  35 , "标尺 = " + QString::number(m_ruler) + " px" );
+    if (m_config->getConfigValue("Paint" , "isInfoFollowArrow").toBool()){
+        painter.drawText(m_line->p2().x()  , m_line->p2().y() - m_config->getConfigValue("Paint","FontSize").toInt() - 5, "距离 = " + QString::number(Dis) + " m");
+        painter.drawText(m_line->p2().x()  , m_line->p2().y()    , "方位 = " + QString::number(Ang) + " °");
+        painter.drawText(m_line->p2().x()  , m_line->p2().y() + m_config->getConfigValue("Paint","FontSize").toInt() + 5, "密位 = " + QString::number(Mil) + " mil");
+    }else{
+        painter.drawText(this->width() - 200  , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt() - 50 , "距离 = " + QString::number(Dis) + " m");
+        painter.drawText(this->width() - 200  , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt()*2 - 55  , "方位 = " + QString::number(Ang) + " °");
+        painter.drawText(this->width() - 200  , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt()*3 - 60  , "密位 = " + QString::number(Mil) + " mil");
+    }
+    painter.drawText(this->width() - 200  , this->height() -  50 + m_config->getConfigValue("Paint","FontSize").toInt() + 5 , "标尺 = " + QString::number(m_ruler) + " px" );
     painter.restore();
 
     if (m_isPressRB){
@@ -149,6 +153,28 @@ void AimWindow::paintEvent(QPaintEvent *e){
         painter.drawText(0,10,"Made by Johnny_焦尼");
         painter.restore();
     }
+}
+
+void AimWindow::paintArrowLine(QPainter &painter, QLineF &line){
+    painter.drawLine(line);
+    QLineF v = line.unitVector();
+    v.setLength(10);
+    //qDebug()<< v.length();
+    v.translate(line.dx() - v.dx() , line.dy() - v.dy());
+    QLineF n = v.normalVector();
+    //n.setLength(n.length() *0.5);
+    n.translate(n.dx() / -2.0 , n.dy() / -2.0);
+    QPolygonF arrow = QPolygonF();
+    arrow.append(line.p2());
+    arrow.append(n.p2());
+    arrow.append(n.p1());
+    arrow.append(line.p2());
+    QPainterPath path ;
+    path.addPolygon(arrow);
+    painter.save();
+    painter.setBrush(QBrush(QColor(m_pen->color())));
+    painter.drawPath(path);
+    painter.restore();
 }
 
 double AimWindow::getDistance(){

@@ -29,6 +29,7 @@ public:
     void setAlphaValue();
     double getDistance();
     double countAngle();
+    void paintArrowLine(QPainter& painter, QLineF& line);
 private:
     explicit AimWindow(QWidget *parent = nullptr);
 
