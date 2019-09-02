@@ -121,7 +121,7 @@ void AimWindow::paintEvent(QPaintEvent *e){
             for ( int i = 1 ; i <= (int)(Dis / 100) ; i ++ ){
                 painter.drawText(m_line->p1().x() + m_ruler * i + 5 ,m_line->p1().y(), QString::number(i));
                 painter.drawText(m_line->p1().x() - m_ruler * i - 10 ,m_line->p1().y(), QString::number(i));
-                painter.drawText(m_line->p1().x() ,m_line->p1().y() + m_ruler * i + 10, QString::number(i));
+                painter.drawText(m_line->p1().x() ,m_line->p1().y() + m_ruler * i + 11, QString::number(i));
                 painter.drawText(m_line->p1().x() ,m_line->p1().y() - m_ruler * i - 5, QString::number(i));
                 painter.drawEllipse(m_line->p1() , m_ruler * i,m_ruler * i);
             }
