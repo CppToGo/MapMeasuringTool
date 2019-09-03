@@ -1,15 +1,11 @@
 ![GitHub Logoa](/icon/favicon128_128.ico)
 # Super Measuring Tool
-这是一个squad的辅助插件，不是外挂。
+这是一个依照地图提供的比列尺，进行测距的工具。
 
-#Alpha0.1.1版本修改：
-> 本站下载  [SMT_Alpha0.1.1.zip](https://github.com/CppToGo/SquadPlugin/files/3562085/SMT_Alpha0.1.1.zip)  
-> 百度网盘  [所有版本都在这里，以后也都发这个地址 SMT_Alpha0.1.1.zip](https://pan.baidu.com/s/1BH1IDVoaA9STs1l_RvHYbA)
+#Alpha0.1.2版本修改：
+> 网盘链接: [https://pan.baidu.com/s/1UPebgpCKgbbOMLIh86Eqvg](https://pan.baidu.com/s/1UPebgpCKgbbOMLIh86Eqvg)
 
-#Alpha0.1.0版本：
-> GitHub: [SMT_Alpha0.1.0.zip](https://github.com/CppToGo/SquadPlugin/files/3558628/SMT_Alpha0.1.0.zip)  （特慢）  
-> 下载源码: [SMT_Alpha0.1.0.zip](https://github.com/CppToGo/SquadPlugin/releases)  （慢）  
-> 百度网盘: [SMT_Alpha0.1.0.zip](https://pan.baidu.com/s/1bgAbescZWx21xCuwUH6DsA) （这个比较快）  
+
 # 关于Super Measuring Tool的介绍（以下简称SMT）
 这是第一版，也有很大可能就是最后一版，只要有需要将持续改进；
 ## 标尺
@@ -43,4 +39,4 @@
 
 > GitHub: [SMT_Alpha0.1.0.zip](https://github.com/CppToGo/SquadPlugin/files/3558628/SMT_Alpha0.1.0.zip)  （特慢）  
 > 下载源码: [SMT_Alpha0.1.0.zip](https://github.com/CppToGo/SquadPlugin/releases)  （慢）  
-> 百度网盘: [SMT_Alpha0.1.0.zip](https://pan.baidu.com/s/1bgAbescZWx21xCuwUH6DsA) （这个比较快）  
+> 百度网盘: [https://pan.baidu.com/s/1UPebgpCKgbbOMLIh86Eqvg](https://pan.baidu.com/s/1UPebgpCKgbbOMLIh86Eqvg) （这个比较快）  
