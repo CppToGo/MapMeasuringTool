@@ -25,14 +25,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        commonfunc.cpp \
         config.cpp \
+        knnopencv.cpp \
         main.cpp \
         aimwindow.cpp \
         win32hook.cpp
 
 HEADERS += \
         aimwindow.h \
+        commonfunc.h \
         config.h \
+        knnopencv.h \
         win32hook.h
 
 FORMS += \
@@ -43,7 +47,27 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+OPENCV_PATH=E:\opencv-4.1.1\win_Build\install
+
+win32 {
+        INCLUDEPATH     += $${OPENCV_PATH}\include
+
+        CONFIG(debug , debug | release):{
+                LIBS            += $${OPENCV_PATH}\x64\mingw\bin\libopencv_*.dll
+        } else:CONFIG(release , debug | release):{
+                LIBS            += -L$${OPENCV_PATH}\x64\mingw\bin \
+                                   -llibopencv_core411 \
+                                   -llibopencv_highgui411 \
+                                   -llibopencv_imgcodecs411 \
+                                   -llibopencv_imgproc411 \
+                                   -llibopencv_features2d411 \
+                                   -llibopencv_calib3d411
+       }
+}
+
 DISTFILES += \
     icon/favicon128_128.ico \
 
 RC_ICONS =  icon/favicon128_128.ico
+
+

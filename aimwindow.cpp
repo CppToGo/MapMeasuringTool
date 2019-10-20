@@ -4,6 +4,7 @@
 #include <QCursor>
 #include <QBitmap>
 #include <QPolygonF>
+#include <QDesktopWidget>
 
 extern HHOOK keyHook;
 AimWindow* AimWindow::m_Instance = nullptr ;
@@ -17,7 +18,10 @@ AimWindow::AimWindow(QWidget *parent) :
     m_normalLine(new QLineF(0,0,0,-100)),
     m_ruler(100),
     m_config(new Config()),
-    m_isUsingTool(true)
+    m_knn(new KnnOpencv()),
+    m_isUsingTool(true),
+    m_AutoStatu_len(true),
+    m_AutoStatu_type(true)
 {
     ui->setupUi(this);
 
@@ -46,6 +50,7 @@ AimWindow::~AimWindow()
     delete m_line;
     delete m_config;
     delete m_normalLine;
+    delete m_knn;
     hookClose();
     qDebug()<< "quit ~AimWindow";
 }
@@ -53,9 +58,42 @@ AimWindow::~AimWindow()
 void AimWindow::mousePressEvent(QMouseEvent *e){
     if (e->button() == Qt::RightButton){
         m_isPressRB = !m_isPressRB ;
+//        QPixmap pix = QGuiApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId(),1721,884,150,10);
+//        double ruler = m_knn->GetLineLength(pix);
+//        if ( ruler > 0 ){
+//            m_ruler = ruler;
+//        }
     }
     if (e->button() == Qt::LeftButton){
         m_isPressLB = !m_isPressLB ;
+        m_AutoStatu_len = true ;
+        m_AutoStatu_type = true ;
+        QPixmap pix = QGuiApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId());
+        QPixmap Ruler_len = pix.copy(1425,907,446,9) , Ruler_type = pix.copy(1841,896,17,8);
+        double ruler_len = m_knn->GetLineLength(Ruler_len);
+        int ruler_type = m_knn->GetRuleType(Ruler_type);
+        switch (ruler_type) {
+        case 33:
+            ruler_len *= 3 ;
+            break;
+        case 100:
+            break;
+        case 300:
+            ruler_len /= 3 ;
+            break;
+        case 900:
+            ruler_len /= 9 ;
+            break;
+        default:
+            m_AutoStatu_type = false ;
+            break;
+        }
+        if (ruler_len > 0 ){
+            m_ruler = ruler_len;
+        }else{
+             m_AutoStatu_len = false ;
+        }
+
         m_line->setP1(e->pos());
         m_normalLine->setLine(m_line->x1() , m_line->y1() ,  m_line->x1() , m_line->y1() - m_line->length()); //设置法线
         update();
@@ -82,16 +120,33 @@ void AimWindow::mouseMoveEvent(QMouseEvent *e){
     }
 }
 void AimWindow::keyPressEvent(QKeyEvent *e){
-    qDebug()<<  e->key() << m_config->getConfigValue("KeyBoard", "100mRuler").toInt() ;
-    if (e->key() == m_config->getConfigValue("KeyBoard", "KeyRuler1").toInt()){
-        m_ruler =  m_line->length() * 100 / m_config->getConfigValue("KeyBoard", "Ruler1").toDouble() ;
+    //qDebug()<<  e->key() << m_config->getConfigValue("KeyBoard", "100mRuler").toInt() ;
+    if (!m_AutoStatu_len){
+        if (e->key() == m_config->getConfigValue("KeyBoard", "KeyRuler1").toInt()){
+            m_ruler =  m_line->length() * 100 / m_config->getConfigValue("KeyBoard", "Ruler1").toDouble() ;
+        }
+        if (e->key() == m_config->getConfigValue("KeyBoard", "KeyRuler2").toInt()){
+            m_ruler =  m_line->length() * 100 / m_config->getConfigValue("KeyBoard", "Ruler2").toDouble() ;
+        }
+        if (e->key() == m_config->getConfigValue("KeyBoard", "KeyRuler3").toInt()){
+            m_ruler =  m_line->length() * 100 / m_config->getConfigValue("KeyBoard", "Ruler3").toDouble() ;
+        }
+    }else{
+        switch (e->key()) {
+        case 49:
+            break;
+        case 51:
+            m_ruler /= 3;
+            break;
+        case 57:
+            m_ruler /= 9;
+            break;
+        default:
+            break;
+        }
+
     }
-    if (e->key() == m_config->getConfigValue("KeyBoard", "KeyRuler2").toInt()){
-        m_ruler =  m_line->length() * 100 / m_config->getConfigValue("KeyBoard", "Ruler2").toDouble() ;
-    }
-    if (e->key() == m_config->getConfigValue("KeyBoard", "KeyRuler3").toInt()){
-        m_ruler =  m_line->length() * 100 / m_config->getConfigValue("KeyBoard", "Ruler3").toDouble() ;
-    }
+
     update();
 }
 
@@ -138,11 +193,13 @@ void AimWindow::paintEvent(QPaintEvent *e){
         painter.drawText(m_line->p2().x()  , m_line->p2().y()    , "方位 = " + QString::number(Ang) + " °");
         painter.drawText(m_line->p2().x()  , m_line->p2().y() + m_config->getConfigValue("Paint","FontSize").toInt() + 5, "密位 = " + QString::number(Mil) + " mil");
     }else{
-        painter.drawText(this->width() - 200  , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt() - 50 , "距离 = " + QString::number(Dis) + " m");
-        painter.drawText(this->width() - 200  , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt()*2 - 55  , "方位 = " + QString::number(Ang) + " °");
-        painter.drawText(this->width() - 200  , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt()*3 - 60  , "密位 = " + QString::number(Mil) + " mil");
+        painter.drawText(this->width() - 300  , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt() - 15 , "距离 = " + QString::number(Dis) + " m");
+        painter.drawText(this->width() - 300  , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt()*2 - 20  , "方位 = " + QString::number(Ang) + " °");
+        painter.drawText(this->width() - 300 , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt()*3 - 25  , "密位 = " + QString::number(Mil) + " mil");
     }
-    painter.drawText(this->width() - 200  , this->height() -  50 + m_config->getConfigValue("Paint","FontSize").toInt() + 5 , "标尺 = " + QString::number(m_ruler) + " px" );
+    QString text ;
+    //painter.drawText(this->width() - 250  , this->height() -  50 + m_config->getConfigValue("Paint","FontSize").toInt() + 35 ,  "标尺 = " + QString::number(m_ruler) + " px" );
+    painter.drawText(this->width() - 300  , this->height() -  50 + m_config->getConfigValue("Paint","FontSize").toInt() + 35 ,QString("Auto= %1").arg(m_AutoStatu_len? (m_AutoStatu_type?"正常":"快捷"):"手动"));
     painter.restore();
 
     if (m_isPressRB){

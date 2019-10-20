@@ -10,6 +10,8 @@
 #include <math.h>
 #include <QtDebug>
 #include <config.h>
+#include <knnopencv.h>
+
 #define Pi 3.1415926
 
 namespace Ui {
@@ -44,7 +46,10 @@ private:
     char m_minAlpha;
     static AimWindow* m_Instance ;
     Config * m_config;
+    KnnOpencv *m_knn ;
     bool m_isUsingTool ;
+    bool  m_AutoStatu_len ;
+    bool  m_AutoStatu_type ;
 protected:
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
