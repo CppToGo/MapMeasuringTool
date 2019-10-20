@@ -193,13 +193,13 @@ void AimWindow::paintEvent(QPaintEvent *e){
         painter.drawText(m_line->p2().x()  , m_line->p2().y()    , "方位 = " + QString::number(Ang) + " °");
         painter.drawText(m_line->p2().x()  , m_line->p2().y() + m_config->getConfigValue("Paint","FontSize").toInt() + 5, "密位 = " + QString::number(Mil) + " mil");
     }else{
-        painter.drawText(this->width() - 300  , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt() - 15 , "距离 = " + QString::number(Dis) + " m");
-        painter.drawText(this->width() - 300  , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt()*2 - 20  , "方位 = " + QString::number(Ang) + " °");
-        painter.drawText(this->width() - 300 , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt()*3 - 25  , "密位 = " + QString::number(Mil) + " mil");
+        painter.drawText(this->width() - 260  , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt() - 65 , "距离 = " + QString::number(Dis) + " m");
+        painter.drawText(this->width() - 260  , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt()*2 - 70  , "方位 = " + QString::number(Ang) + " °");
+        painter.drawText(this->width() - 260 , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt()*3 - 75  , "密位 = " + QString::number(Mil) + " mil");
     }
     QString text ;
     //painter.drawText(this->width() - 250  , this->height() -  50 + m_config->getConfigValue("Paint","FontSize").toInt() + 35 ,  "标尺 = " + QString::number(m_ruler) + " px" );
-    painter.drawText(this->width() - 300  , this->height() -  50 + m_config->getConfigValue("Paint","FontSize").toInt() + 35 ,QString("Auto= %1").arg(m_AutoStatu_len? (m_AutoStatu_type?"正常":"快捷"):"手动"));
+    painter.drawText(this->width() - 260  , this->height() - m_config->getConfigValue("Paint","FontSize").toInt() - 50 ,QString("Auto= %1").arg(m_AutoStatu_len? (m_AutoStatu_type?"正常":"快捷"):"手动"));
     painter.restore();
 
     if (m_isPressRB){
