@@ -21,7 +21,8 @@ AimWindow::AimWindow(QWidget *parent) :
     m_knn(new KnnOpencv()),
     m_isUsingTool(true),
     m_AutoStatu_len(true),
-    m_AutoStatu_type(true)
+    m_AutoStatu_type(true),
+    m_Auto_lock(false)
 {
     ui->setupUi(this);
 
@@ -66,32 +67,39 @@ void AimWindow::mousePressEvent(QMouseEvent *e){
     }
     if (e->button() == Qt::LeftButton){
         m_isPressLB = !m_isPressLB ;
-        m_AutoStatu_len = true ;
-        m_AutoStatu_type = true ;
-        QPixmap pix = QGuiApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId());
-        QPixmap Ruler_len = pix.copy(1425,907,446,9) , Ruler_type = pix.copy(1841,896,17,8);
-        double ruler_len = m_knn->GetLineLength(Ruler_len);
-        int ruler_type = m_knn->GetRuleType(Ruler_type);
-        switch (ruler_type) {
-        case 33:
-            ruler_len *= 3 ;
-            break;
-        case 100:
-            break;
-        case 300:
-            ruler_len /= 3 ;
-            break;
-        case 900:
-            ruler_len /= 9 ;
-            break;
-        default:
-            m_AutoStatu_type = false ;
-            break;
-        }
-        if (ruler_len > 0 ){
-            m_ruler = ruler_len;
-        }else{
-             m_AutoStatu_len = false ;
+
+        if (!m_Auto_lock){
+            m_AutoStatu_len = true ;
+            m_AutoStatu_type = true ;
+            QPixmap pix = QGuiApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId());
+            //qDebug() << m_config->getAutoLineArea()  << m_config->getAutoNumerArea() ;
+            QPixmap Ruler_len = pix.copy(m_config->getAutoLineArea()) , Ruler_type = pix.copy(m_config->getAutoNumerArea());
+            double ruler_len = m_knn->GetLineLength(Ruler_len);
+            int ruler_type = m_knn->GetRuleType(Ruler_type);
+            switch (ruler_type) {
+            case 33:
+                ruler_len *= 3 ;
+                break;
+            case 100:
+                break;
+            case 300:
+                ruler_len /= 3 ;
+                break;
+            case 900:
+                ruler_len /= 9 ;
+                break;
+            default:
+                m_AutoStatu_type = false ;
+                break;
+            }
+            if (ruler_len > 0 ){
+                m_ruler = ruler_len;
+            }else{
+                 m_AutoStatu_len = false ;
+            }
+
+            m_Auto_lock = true;//自动识别加锁，防止每次点击都会自动识别，只有在下一次进入使用时，才会在 setAlphaValue（） 方法中恢复
+            m_Old_Ruler = ruler_len ;
         }
 
         m_line->setP1(e->pos());
@@ -122,6 +130,9 @@ void AimWindow::mouseMoveEvent(QMouseEvent *e){
 void AimWindow::keyPressEvent(QKeyEvent *e){
     //qDebug()<<  e->key() << m_config->getConfigValue("KeyBoard", "100mRuler").toInt() ;
     if (!m_AutoStatu_len){
+        if (m_line->length() < 30){ //不能设置太小，否则会造成配置低的电脑卡顿
+            return ;
+        }
         if (e->key() == m_config->getConfigValue("KeyBoard", "KeyRuler1").toInt()){
             m_ruler =  m_line->length() * 100 / m_config->getConfigValue("KeyBoard", "Ruler1").toDouble() ;
         }
@@ -134,12 +145,13 @@ void AimWindow::keyPressEvent(QKeyEvent *e){
     }else{
         switch (e->key()) {
         case 49:
+            m_ruler = m_Old_Ruler ;
             break;
         case 51:
-            m_ruler /= 3;
+            m_ruler = m_Old_Ruler / 3;
             break;
         case 57:
-            m_ruler /= 9;
+            m_ruler = m_Old_Ruler / 9;
             break;
         default:
             break;
@@ -269,8 +281,8 @@ void AimWindow::wheelEvent(QWheelEvent *e){
             m_ruler -= 5 ;
           }
     }
-    if(m_ruler <=0){
-        m_ruler = 1;
+    if(m_ruler <=30){
+        m_ruler = 30;
       }
     update();
 }
@@ -304,6 +316,7 @@ void AimWindow::hookClose(){
 void AimWindow::setAlphaValue(){ //设置透明背景
     m_alpha = m_alpha > 0 ? 0 : m_minAlpha;
     m_isUsingTool = !m_isUsingTool ;
+    m_Auto_lock = false ; //解除自动识别锁
     update();
 }
 

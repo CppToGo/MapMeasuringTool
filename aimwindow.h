@@ -42,14 +42,16 @@ private:
     QLineF *m_line ;
     QLineF *m_normalLine;
     double m_ruler;
+    double m_Old_Ruler;
     char m_alpha;
     char m_minAlpha;
     static AimWindow* m_Instance ;
     Config * m_config;
     KnnOpencv *m_knn ;
     bool m_isUsingTool ;
-    bool  m_AutoStatu_len ;
-    bool  m_AutoStatu_type ;
+    bool m_AutoStatu_len ;
+    bool m_AutoStatu_type ;
+    bool m_Auto_lock;
 protected:
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);

@@ -12,6 +12,7 @@ Config::Config()
       }
     }
   m_config->endGroup();
+
   //qDebug()<< "config" << config->allKeys();
 //    foreach (QPointF* key, m_milList) {
 //            qDebug()<< key->rx() << "\t"<<  key->ry() ;
@@ -54,7 +55,19 @@ QVariant Config::getConfigValue(QString Session ,QString key){
 }
 
 
+QRect Config::getAutoNumerArea(){
+    m_config->beginGroup("Auto");
+    QRect temp = QRect(getConfigValue("Number_X").toInt(),getConfigValue("Number_Y").toInt(),getConfigValue("Number_Width").toInt(),getConfigValue("Number_Height").toInt());
+    m_config->endGroup();
+    return temp;
+}
 
+QRect Config::getAutoLineArea(){
+    m_config->beginGroup("Auto");
+    QRect temp = QRect(getConfigValue("Line_X").toInt(),getConfigValue("Line_Y").toInt(),getConfigValue("Line_Width").toInt(),getConfigValue("Line_Height").toInt());
+    m_config->endGroup();
+    return  temp;
+}
 
 
 

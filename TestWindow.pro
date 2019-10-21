@@ -47,26 +47,32 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-OPENCV_PATH=E:\opencv-4.1.1\win_Build\install
+
 
 win32 {
+        OPENCV_PATH=E:\Qt\OpenCV_Qt_build\install
+        #OPENCV_PATH=getenv("OPENCV_PATH")
+        OPENCV_BASE=getenv("OPENCV_BASE")
+
         INCLUDEPATH     += $${OPENCV_PATH}\include
 
         CONFIG(debug , debug | release):{
-                LIBS            += $${OPENCV_PATH}\x64\mingw\bin\libopencv_*.dll
+                LIBS            += ${OPENCV_PATH}\\${OPENCV_BASE}\mingw\bin\libopencv_*.dll
         } else:CONFIG(release , debug | release):{
-                LIBS            += -L$${OPENCV_PATH}\x64\mingw\bin \
+                LIBS            += -L${OPENCV_PATH}\\${OPENCV_BASE}\mingw\bin \
                                    -llibopencv_core411 \
                                    -llibopencv_highgui411 \
                                    -llibopencv_imgcodecs411 \
                                    -llibopencv_imgproc411 \
                                    -llibopencv_features2d411 \
-                                   -llibopencv_calib3d411
+                                   -llibopencv_calib3d411 \
+                                   -llibopencv_ml411
        }
 }
 
 DISTFILES += \
     icon/favicon128_128.ico \
+
 
 RC_ICONS =  icon/favicon128_128.ico
 

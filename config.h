@@ -16,6 +16,8 @@ public:
     qreal getMil(qreal distance);
     QVariant getConfigValue(QString key);
     QVariant getConfigValue(QString Session , QString key);
+    QRect getAutoNumerArea();
+    QRect getAutoLineArea();
 private:
     qreal countMil(QPointF* A, QPointF *B  , qreal distance);
     QList<QPointF *> m_milList;
