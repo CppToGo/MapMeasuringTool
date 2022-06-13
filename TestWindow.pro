@@ -30,6 +30,7 @@ CONFIG += c++11
 SOURCES += \
         commonfunc.cpp \
         config.cpp \
+        httpserver.cpp \
         knnopencv.cpp \
         main.cpp \
         aimwindow.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
         aimwindow.h \
         commonfunc.h \
         config.h \
+        httpserver.h \
         knnopencv.h \
         websocket.h \
         win32hook.h

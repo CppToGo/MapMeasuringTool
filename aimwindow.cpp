@@ -22,7 +22,8 @@ AimWindow::AimWindow(QWidget *parent) :
     m_isUsingTool(true),
     m_AutoStatu_len(true),
     m_AutoStatu_type(true),
-    m_Auto_lock(false)
+    m_Auto_lock(false),
+    m_IPAddress(getHostIpAddress())
 {
     ui->setupUi(this);
 
@@ -35,7 +36,9 @@ AimWindow::AimWindow(QWidget *parent) :
     m_pen = new QPen(QColor(255,0,0,150) , m_config->getConfigValue("Paint", "LineWidth").toInt() , Qt::SolidLine , Qt::FlatCap, Qt::MiterJoin);
 
     //开启websock 服务
-    m_websocketServer = new websocket(uint16_t(m_config->getConfigValue("WebSocket", "Port").toUInt()));
+    m_websocketServer = new websocket(QHostAddress::Any, uint16_t(m_config->getConfigValue("Network", "webSocketPort").toUInt()));
+    QString WebAddr = m_IPAddress.toString() + ":" + m_config->getConfigValue("Network", "webSocketPort").toString();
+    m_httpServer = new HttpServer(QHostAddress::Any, quint16(m_config->getConfigValue("Network", "httpServerPort").toUInt()), WebAddr);
 
 #if WIN32
     m_minAlpha = 1;
@@ -199,23 +202,25 @@ void AimWindow::paintEvent(QPaintEvent *e){
 //        painter.restore();
     }
     painter.restore();
-
+    int FontSize = m_config->getConfigValue("Paint","FontSize").toInt();
     painter.save();
-    painter.setFont(QFont(m_config->getConfigValue("Paint","FontStyle").toString(), m_config->getConfigValue("Paint","FontSize").toInt()));
+    painter.setFont(QFont(m_config->getConfigValue("Paint","FontStyle").toString(), FontSize));
     painter.setPen(QColor(255, 0 ,0));
-   insertAction(nt FontSize = m_config->getConfigValue("Paint","FontSize").toInt()
+
+
     if (m_config->getConfigValue("Paint" , "isInfoFollowArrow").toBool()){
-        painter.drawText(m_line->p2().x()  , m_line->p2().y() - m_config->getConfigValue("Paint","FontSize").toInt() - 5, "距离 = " + QString::number(Dis) + " m");
+        painter.drawText(m_line->p2().x()  , m_line->p2().y() - FontSize - 5, "距离 = " + QString::number(Dis) + " m");
         painter.drawText(m_line->p2().x()  , m_line->p2().y()    , "方位 = " + QString::number(Ang) + " °");
-        painter.drawText(m_line->p2().x()  , m_line->p2().y() + m_config->getConfigValue("Paint","FontSize").toInt() + 5, "密位 = " + QString::number(Mil) + " mil");
+        painter.drawText(m_line->p2().x()  , m_line->p2().y() + FontSize + 5, "密位 = " + QString::number(Mil) + " mil");
     }else{
-        painter.drawText(this->width() - 320  , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt() - 65 , "距离 = " + QString::number(Dis) + " m");
-        painter.drawText(this->width() - 320  , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt()*2 - 70  , "方位 = " + QString::number(Ang) + " °");
-        painter.drawText(this->width() - 320 , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt()*3 - 75  , "密位 = " + QString::number(Mil) + " mil");
+        painter.drawText(this->width() - 320  , this->height()-  FontSize - 65 , "距离 = " + QString::number(Dis) + " m");
+        painter.drawText(this->width() - 320  , this->height()-  FontSize*2 - 70  , "方位 = " + QString::number(Ang) + " °");
+        painter.drawText(this->width() - 320  , this->height()-  FontSize*3 - 75  , "密位 = " + QString::number(Mil) + " mil");
     }
     QString text ;
     //painter.drawText(this->width() - 250  , this->height() -  50 + m_config->getConfigValue("Paint","FontSize").toInt() + 35 ,  "标尺 = " + QString::number(m_ruler) + " px" );
-    painter.drawText(this->width() - 320  , this->height() - m_config->getConfigValue("Paint","FontSize").toInt() - 50 ,QString("Auto= %1").arg(m_AutoStatu_len? (m_AutoStatu_type?"正常":"快捷"):"手动"));
+    painter.drawText(this->width() - 320  , this->height() - FontSize - 50 ,QString("Auto= %1").arg(m_AutoStatu_len? (m_AutoStatu_type?"正常":"快捷"):"手动"));
+    painter.drawText(this->width() - 320  , this->height() - FontSize / 2 - 40 ,QString("HttpURL:%1").arg( m_IPAddress.toString() + ":" + m_config->getConfigValue("Network", "httpServerPort").toString() ));
     painter.restore();
 
     if (m_isPressRB){
@@ -226,7 +231,12 @@ void AimWindow::paintEvent(QPaintEvent *e){
         painter.drawText(0,10,"Made by Johnny_焦尼");
         painter.restore();
     }
-    m_websocketServer->SendToClientMessage( "距离 = " + QString::number(Dis) + " m" +  "方位 = " + QString::number(Ang) + " °");
+    QJsonObject qjson;
+    qjson.insert("distance", QJsonValue(Dis));
+    qjson.insert("direction", QJsonValue(Ang));
+    qjson.insert("mil", QJsonValue(Mil));
+    QJsonDocument jsDoc(qjson);
+    m_websocketServer->SendToClientMessage(jsDoc.toJson());
 }
 
 void AimWindow::paintArrowLine(QPainter &painter, QLineF &line){

@@ -17,7 +17,7 @@ class websocket: public QObject
     QList<QWebSocket*> clients;
 
 public:
-    websocket(uint16_t port);
+    websocket(QHostAddress hostAddress, uint16_t port);
     void SendToClientMessage(QString data);
 
 signals:

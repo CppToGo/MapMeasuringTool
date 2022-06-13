@@ -12,6 +12,10 @@
 #include <config.h>
 #include <knnopencv.h>
 #include <websocket.h>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <httpserver.h>
+#include <commonfunc.h>
 
 #define Pi 3.1415926
 
@@ -53,7 +57,9 @@ private:
     bool m_AutoStatu_len ;
     bool m_AutoStatu_type ;
     bool m_Auto_lock;
+    QHostAddress m_IPAddress;
     websocket* m_websocketServer;
+    HttpServer* m_httpServer;
 protected:
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);

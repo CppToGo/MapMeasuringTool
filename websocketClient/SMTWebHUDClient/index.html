@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<!-- <script src="https://unpkg.com/vue@next"></script> -->
+		<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+	</head>
+	<body>
+		<div id="app">
+			<p>距离：{{ distance }}</p>
+			<p>方向：{{ direction }}</p>
+			<p>迫击炮密位：{{ mil }}</p>
+		</div>
+		
+		<script>
+			var app = new Vue({
+				el : '#app',
+				data:{
+					Status:	"disconnect",
+					distance:'0',
+					direction:'0',
+					mil:'0',
+				}
+			})
+			if (typeof(WebSocket) === "undefined") {
+				alert("您的浏览器不支持socket")
+			}else{
+				var ws = new WebSocket("ws://xxxxdddd");
+				// switch (ws.readyState) {
+				// 	case WebSocket.CONNECTING:
+				// 		console.log("connecting");
+				// 		app.Status = "connecting"
+				// 		break;
+				// 	case WebSocket.OPEN :
+				// 		console.log("connected");
+				// 		app.Status = "connected"
+				// 		break;
+				// 	case WebSocket.CLOSING:
+				// 		console.log("Closing");
+				// 		app.Status = "closing"
+				// 		break;
+				// 	case WebSocket.CLOSED:
+				// 		console.log("closed");
+				// 		app.Status = "closed"
+				// 		break;
+						
+				// }
+				ws.onmessage = function(event){
+					//console.log(event.data)
+					let jdata = JSON.parse(event.data)
+					if (jdata){
+						app.distance = jdata["distance"] + "m";
+						app.direction = jdata["direction"] + " °";
+						app.mil = jdata["mil"] + "mil";
+					}else{
+						app.Message = event.data
+					}
+					
+				}
+			}
+		</script>
+	</body>
+</html>

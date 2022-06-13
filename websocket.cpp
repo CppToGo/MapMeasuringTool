@@ -1,9 +1,9 @@
 #include "websocket.h"
 
-websocket::websocket(uint16_t port)
+websocket::websocket(QHostAddress hostAddress, uint16_t port)
     :Server(new QWebSocketServer(QStringLiteral("Super Messure Tool Server"), QWebSocketServer::NonSecureMode))
 {
-    if(this->Server->listen(QHostAddress::Any, port)){
+    if(this->Server->listen(hostAddress, port)){
         qDebug() << "start websocket listen :" << port;
 
 //        qDebug()<<Server->isListening();
