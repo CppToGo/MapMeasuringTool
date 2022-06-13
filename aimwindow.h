@@ -11,6 +11,7 @@
 #include <QtDebug>
 #include <config.h>
 #include <knnopencv.h>
+#include <websocket.h>
 
 #define Pi 3.1415926
 
@@ -52,6 +53,7 @@ private:
     bool m_AutoStatu_len ;
     bool m_AutoStatu_type ;
     bool m_Auto_lock;
+    websocket* m_websocketServer;
 protected:
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);

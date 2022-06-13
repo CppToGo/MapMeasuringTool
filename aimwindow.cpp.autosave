@@ -203,15 +203,16 @@ void AimWindow::paintEvent(QPaintEvent *e){
     painter.save();
     painter.setFont(QFont(m_config->getConfigValue("Paint","FontStyle").toString(), m_config->getConfigValue("Paint","FontSize").toInt()));
     painter.setPen(QColor(255, 0 ,0));
-   insertAction(nt FontSize = m_config->getConfigValue("Paint","FontSize").toInt()
+   
+    int FontSize = m_config->getConfigValue("Paint","FontSize").toInt();
     if (m_config->getConfigValue("Paint" , "isInfoFollowArrow").toBool()){
-        painter.drawText(m_line->p2().x()  , m_line->p2().y() - m_config->getConfigValue("Paint","FontSize").toInt() - 5, "距离 = " + QString::number(Dis) + " m");
+        painter.drawText(m_line->p2().x()  , m_line->p2().y() - FontSize - 5, "距离 = " + QString::number(Dis) + " m");
         painter.drawText(m_line->p2().x()  , m_line->p2().y()    , "方位 = " + QString::number(Ang) + " °");
-        painter.drawText(m_line->p2().x()  , m_line->p2().y() + m_config->getConfigValue("Paint","FontSize").toInt() + 5, "密位 = " + QString::number(Mil) + " mil");
+        painter.drawText(m_line->p2().x()  , m_line->p2().y() + FontSize + 5, "密位 = " + QString::number(Mil) + " mil");
     }else{
-        painter.drawText(this->width() - 320  , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt() - 65 , "距离 = " + QString::number(Dis) + " m");
-        painter.drawText(this->width() - 320  , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt()*2 - 70  , "方位 = " + QString::number(Ang) + " °");
-        painter.drawText(this->width() - 320 , this->height()-  m_config->getConfigValue("Paint","FontSize").toInt()*3 - 75  , "密位 = " + QString::number(Mil) + " mil");
+        painter.drawText(this->width() - 320  , this->height()-  FontSize - 65 , "距离 = " + QString::number(Dis) + " m");
+        painter.drawText(this->width() - 320  , this->height()-  FontSize*2 - 70  , "方位 = " + QString::number(Ang) + " °");
+        painter.drawText(this->width() - 320  , this->height()-  FontSize*3 - 75  , "密位 = " + QString::number(Mil) + " mil");
     }
     QString text ;
     //painter.drawText(this->width() - 250  , this->height() -  50 + m_config->getConfigValue("Paint","FontSize").toInt() + 35 ,  "标尺 = " + QString::number(m_ruler) + " px" );

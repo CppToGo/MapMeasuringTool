@@ -4,7 +4,10 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
+
+QT       += serialport
+QT       += websockets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -30,6 +33,7 @@ SOURCES += \
         knnopencv.cpp \
         main.cpp \
         aimwindow.cpp \
+        websocket.cpp \
         win32hook.cpp
 
 HEADERS += \
@@ -37,6 +41,7 @@ HEADERS += \
         commonfunc.h \
         config.h \
         knnopencv.h \
+        websocket.h \
         win32hook.h
 
 FORMS += \
@@ -50,16 +55,17 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 
 win32 {
-        OPENCV_PATH=E:\Qt\OpenCV_Qt_build\install
+        #OPENCV_PATH=E:\Qt\OpenCV_Qt_build\install
+        OPENCV_PATH=E:\opencv-4.1.1\win_Build\install
         #OPENCV_PATH=getenv("OPENCV_PATH")
-        OPENCV_BASE=getenv("OPENCV_BASE")
+        OPENCV_BASE=x64
 
         INCLUDEPATH     += $${OPENCV_PATH}\include
 
         CONFIG(debug , debug | release):{
-                LIBS            += ${OPENCV_PATH}\\${OPENCV_BASE}\mingw\bin\libopencv_*.dll
+                LIBS            += $${OPENCV_PATH}\\$${OPENCV_BASE}\mingw\bin\libopencv_*.dll
         } else:CONFIG(release , debug | release):{
-                LIBS            += -L${OPENCV_PATH}\\${OPENCV_BASE}\mingw\bin \
+                LIBS            += -L$${OPENCV_PATH}\\$${OPENCV_BASE}\mingw\bin \
                                    -llibopencv_core411 \
                                    -llibopencv_highgui411 \
                                    -llibopencv_imgcodecs411 \
