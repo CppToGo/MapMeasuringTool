@@ -172,9 +172,11 @@ void AimWindow::paintEvent(QPaintEvent *e){
     //计算出所需数据
     double Dis = m_line->length() / m_ruler * 100.0 ;
     double Ang = this->countAngle() ;
-    double Mil =  m_config->getMil(Dis);
-
-
+    double PJPMil =  m_config->getPJPMil(Config::PJP , Dis);
+    double VPJPMil =  m_config->getPJPMil(Config::VPJP, Dis);
+    double HJCMil =  m_config->getPJPMil(Config::HJC , Dis);
+    double MQGMil =  m_config->getPJPMil(Config::MQG , Dis);
+    double MQGSMil =  m_config->getPJPMil(Config::MQGS , Dis);
 
     QPainter painter(this);
     painter.save();
@@ -211,11 +213,11 @@ void AimWindow::paintEvent(QPaintEvent *e){
     if (m_config->getConfigValue("Paint" , "isInfoFollowArrow").toBool()){
         painter.drawText(m_line->p2().x()  , m_line->p2().y() - FontSize - 5, "距离 = " + QString::number(Dis) + " m");
         painter.drawText(m_line->p2().x()  , m_line->p2().y()    , "方位 = " + QString::number(Ang) + " °");
-        painter.drawText(m_line->p2().x()  , m_line->p2().y() + FontSize + 5, "密位 = " + QString::number(Mil) + " mil");
+        painter.drawText(m_line->p2().x()  , m_line->p2().y() + FontSize + 5, "密位 = " + QString::number(PJPMil) + " mil");
     }else{
         painter.drawText(this->width() - 320  , this->height()-  FontSize - 65 , "距离 = " + QString::number(Dis) + " m");
         painter.drawText(this->width() - 320  , this->height()-  FontSize*2 - 70  , "方位 = " + QString::number(Ang) + " °");
-        painter.drawText(this->width() - 320  , this->height()-  FontSize*3 - 75  , "密位 = " + QString::number(Mil) + " mil");
+        painter.drawText(this->width() - 320  , this->height()-  FontSize*3 - 75  , "密位 = " + QString::number(PJPMil) + " mil");
     }
     QString text ;
     //painter.drawText(this->width() - 250  , this->height() -  50 + m_config->getConfigValue("Paint","FontSize").toInt() + 35 ,  "标尺 = " + QString::number(m_ruler) + " px" );
@@ -234,7 +236,11 @@ void AimWindow::paintEvent(QPaintEvent *e){
     QJsonObject qjson;
     qjson.insert("distance", QJsonValue(Dis));
     qjson.insert("direction", QJsonValue(Ang));
-    qjson.insert("mil", QJsonValue(Mil));
+    qjson.insert("pjpmil", QJsonValue(PJPMil));
+    qjson.insert("vpjpmil", QJsonValue(VPJPMil));
+    qjson.insert("hjcmil", QJsonValue(HJCMil));
+    qjson.insert("mqgmil", QJsonValue(MQGMil));
+    qjson.insert("mqgsmil", QJsonValue(MQGSMil));
     QJsonDocument jsDoc(qjson);
     m_websocketServer->SendToClientMessage(jsDoc.toJson());
 }

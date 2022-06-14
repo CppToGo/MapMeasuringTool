@@ -12,15 +12,19 @@ class Config
 public:
     Config();
     ~Config();
-
-    qreal getMil(qreal distance);
+    enum type{PJP=1, VPJP, HJC, MQG, MQGS};
+    qreal getPJPMil(qint16 Weapon, qreal distance);
     QVariant getConfigValue(QString key);
     QVariant getConfigValue(QString Session , QString key);
     QRect getAutoNumerArea();
     QRect getAutoLineArea();
 private:
     qreal countMil(QPointF* A, QPointF *B  , qreal distance);
-    QList<QPointF *> m_milList;
+    QList<QPointF *> m_PjpMilList;
+    QList<QPointF *> m_vPjpMilList;
+    QList<QPointF *> m_HjcMilList;
+    QList<QPointF *> m_MqgMilList;
+    QList<QPointF *> m_MqgSMilList;
     QSettings * m_config ;
 };
 

@@ -79,7 +79,10 @@ win32 {
 }
 
 DISTFILES += \
-    icon/favicon128_128.ico \
+        config/config.ini \
+    icon/favicon128_128.ico \ \
+        knn_sample/sample.bmp \
+        websocketClient/SMTWebHUDClient/index.html
 
 
 RC_ICONS =  icon/favicon128_128.ico

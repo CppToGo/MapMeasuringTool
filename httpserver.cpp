@@ -44,7 +44,7 @@ HttpServer::HttpServer(const QHostAddress &address, const quint16 &port, QString
     QObject::connect(m_httpServer,&QTcpServer::newConnection,this,&HttpServer::newConnection);
 
     QFile file(QCoreApplication::applicationDirPath() +"/websocketClient/SMTWebHUDClient/index.html");
-    qDebug()<< QCoreApplication::applicationDirPath() +"/websocketClient/SMTWebHUDClient/index.html";
+//    qDebug()<< QCoreApplication::applicationDirPath() +"/websocketClient/SMTWebHUDClient/index.html";
     if(file.open(QIODevice::ReadOnly)){
         m_client = file.readAll().replace(QString("xxxxdddd").toUtf8(), WebSoketAddr.toUtf8());
         m_httpServer->listen(address, port);

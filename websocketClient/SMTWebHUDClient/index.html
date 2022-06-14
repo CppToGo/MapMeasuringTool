@@ -6,11 +6,109 @@
 		<!-- <script src="https://unpkg.com/vue@next"></script> -->
 		<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 	</head>
+	<style type="text/css">
+		html,body{
+			height: 100%;
+			width: 100%;
+			border: 0px;
+			padding: 0px;
+			margin: 0px;
+		}
+		div{
+			float : left;
+			background-color: #343434;
+			font-size: 2rem;
+			color: #d4e1f4;
+			text-align: center;
+			height: 100%;
+			width: 100%;
+		}
+		.common {
+			height: 40%;
+		}
+		.item_mil {
+			height: 60%;
+		}
+		.item{
+			width: 33.33%;
+		}
+		.distance{
+			width: 50%;
+		}
+		.direction{
+			width: 50%;
+		}
+		.itemContainer{
+			width: 60%;
+			text-align: left;
+		}
+		table{
+			width: 100%;
+		}
+		.col1{
+			width: 20%;
+		}
+		.col2{
+			width: 80%;
+			text-align: right;
+		}
+	</style>
 	<body>
 		<div id="app">
-			<p>距离：{{ distance }}</p>
-			<p>方向：{{ direction }}</p>
-			<p>迫击炮密位：{{ mil }}</p>
+			<div class="common" >
+				<div class="distance">
+					<p>距离</p>
+					<p>{{ distance }}</p>
+				</div>
+				<div class="direction">
+					<p>方向</p>
+					<p>{{ direction }}</p>
+				</div>
+			</div>
+			<div class="item_mil"  >
+				<div class="item pjp" >
+					<table>
+						<caption>迫击炮</caption>
+						<colgroup  class="col1"></colgroup>
+						<colgroup  class="col2"></colgroup>
+						<tr>
+							<td>密位</td>
+							<td>{{ pjpmil }}</td>
+						</tr>
+						<tr>
+							<td>车载</td>
+							<td>{{ vpjpmil }}</td>
+						</tr>
+					</table>
+				</div>
+				<div class="item hjc" >
+					<table>
+						<caption>火箭车</caption>
+						<colgroup  class="col1"></colgroup>
+						<colgroup  class="col2"></colgroup>
+						<tr>
+							<td>仰角</td>
+							<td>{{ hjcmil }}</td>
+						</tr>
+					</table>
+				</div>
+				<div class="item mqg" >
+					<table>
+						<caption>煤气罐</caption>
+						<colgroup  class="col1"></colgroup>
+						<colgroup  class="col2"></colgroup>
+						<tr>
+							<td>抛射</td>
+							<td>{{ mqgmil }}</td>
+						</tr>
+						<tr>
+							<td>直射</td>
+							<td>{{ mqgsmil }}</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			
 		</div>
 		
 		<script>
@@ -18,9 +116,13 @@
 				el : '#app',
 				data:{
 					Status:	"disconnect",
-					distance:'0',
-					direction:'0',
-					mil:'0',
+					distance:'0 m',
+					direction:'0  °',
+					pjpmil:'0 mil',
+					vpjpmil:'0  °',
+					hjcmil:'0  °',
+					mqgmil:'0  °',
+					mqgsmil:'0  °',
 				}
 			})
 			if (typeof(WebSocket) === "undefined") {
@@ -50,13 +152,16 @@
 					//console.log(event.data)
 					let jdata = JSON.parse(event.data)
 					if (jdata){
-						app.distance = jdata["distance"] + "m";
-						app.direction = jdata["direction"] + " °";
-						app.mil = jdata["mil"] + "mil";
+						app.distance = Number(jdata["distance"]).toFixed(2).toString()  + " m";
+						app.direction = Number(jdata["direction"]).toFixed(2).toString() + "  °";
+						app.pjpmil = Number(jdata["pjpmil"]).toFixed(2).toString() + " mil";
+						app.vpjpmil = Number(jdata["vpjpmil"]).toFixed(2).toString() + "  °";
+						app.hjcmil = Number(jdata["hjcmil"]).toFixed(2).toString() + "  °";
+						app.mqgmil = Number(jdata["mqgmil"]).toFixed(2).toString() + "  °";
+						app.mqgsmil = Number(jdata["mqgsmil"]).toFixed(2).toString() + "  °";
 					}else{
 						app.Message = event.data
 					}
-					
 				}
 			}
 		</script>
