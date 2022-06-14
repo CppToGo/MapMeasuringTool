@@ -230,7 +230,8 @@ void AimWindow::paintEvent(QPaintEvent *e){
         painter.setFont(QFont("Arial Black", 10));
         painter.setPen(QColor(0, 0 ,255,150));
         //if you contributed for this project, you can put your name here.
-        painter.drawText(0,10,"Made by Johnny_焦尼");
+        painter.drawText(0,10,"Code by Johnny_焦尼");
+        painter.drawText(0,30,"Data Support =椰汁=");
         painter.restore();
     }
     QJsonObject qjson;
