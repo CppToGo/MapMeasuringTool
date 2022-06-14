@@ -12,7 +12,7 @@ class Config
 public:
     Config();
     ~Config();
-    enum type{PJP=1, VPJP, HJC, MQG, MQGS};
+    enum type{PJP=1, VPJP, HJC, MQG, MQGS, PJPSCATTER};
     qreal getPJPMil(qint16 Weapon, qreal distance);
     QVariant getConfigValue(QString key);
     QVariant getConfigValue(QString Session , QString key);
@@ -21,6 +21,7 @@ public:
 private:
     qreal countMil(QPointF* A, QPointF *B  , qreal distance);
     QList<QPointF *> m_PjpMilList;
+    QList<QPointF *> m_PjpScatterList;
     QList<QPointF *> m_vPjpMilList;
     QList<QPointF *> m_HjcMilList;
     QList<QPointF *> m_MqgMilList;

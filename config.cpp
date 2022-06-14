@@ -45,6 +45,14 @@ Config::Config()
       }
     }
   m_config->endGroup();
+
+  m_config->beginGroup("PJPSCATTER");
+  for (int i = MIN_DISTANCE ; i <= MAX_DISTANCE ; i +=5 ){
+        if (m_config->value(QString::number(i)).toDouble() > 0 ){
+          m_PjpScatterList.append(new QPointF(i , m_config->value(QString::number(i)).toDouble() ));
+      }
+    }
+  m_config->endGroup();
   //qDebug()<< "config" << config->allKeys();
 //    foreach (QPointF* key, m_milList) {
 //            qDebug()<< key->rx() << "\t"<<  key->ry() ;
@@ -80,10 +88,16 @@ qreal Config::getPJPMil(qint16 Weapon, qreal distance){
     case MQGS:
         temp = m_MqgSMilList;
         break;
+    case PJPSCATTER:
+        temp = m_PjpScatterList;
+        break;
     }
     //qDebug()<< "m_mlist size" << m_milList.size() ;
     for(int i = 0 ; i < temp.size() - 1; i ++){
         if (temp.at(i)->rx() < distance && temp.at(i+1)->rx() > distance){
+//            if (PJPSCATTER == Weapon){
+//                qDebug() << temp.at(i)->toPoint() << temp.at(i+1)->toPoint() << distance;
+//            }
             return countMil(temp.at(i), temp.at(i+1), distance );
         }
         if (qFuzzyIsNull(temp.at(i)->rx() - distance)){

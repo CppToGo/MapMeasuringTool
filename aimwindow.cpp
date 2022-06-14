@@ -174,6 +174,7 @@ void AimWindow::paintEvent(QPaintEvent *e){
     double Ang = this->countAngle() ;
     double PJPMil =  m_config->getPJPMil(Config::PJP , Dis);
     double VPJPMil =  m_config->getPJPMil(Config::VPJP, Dis);
+    double PJPScatter =  m_config->getPJPMil(Config::PJPSCATTER, Dis);
     double HJCMil =  m_config->getPJPMil(Config::HJC , Dis);
     double MQGMil =  m_config->getPJPMil(Config::MQG , Dis);
     double MQGSMil =  m_config->getPJPMil(Config::MQGS , Dis);
@@ -239,6 +240,7 @@ void AimWindow::paintEvent(QPaintEvent *e){
     qjson.insert("direction", QJsonValue(Ang));
     qjson.insert("pjpmil", QJsonValue(PJPMil));
     qjson.insert("vpjpmil", QJsonValue(VPJPMil));
+    qjson.insert("pjpscatter", QJsonValue(PJPScatter));
     qjson.insert("hjcmil", QJsonValue(HJCMil));
     qjson.insert("mqgmil", QJsonValue(MQGMil));
     qjson.insert("mqgsmil", QJsonValue(MQGSMil));

@@ -72,6 +72,10 @@
 						<colgroup  class="col1"></colgroup>
 						<colgroup  class="col2"></colgroup>
 						<tr>
+							<td>散布</td>
+							<td>{{ pjpscatter}}</td>
+						</tr>
+						<tr>
 							<td>密位</td>
 							<td>{{ pjpmil }}</td>
 						</tr>
@@ -118,6 +122,7 @@
 					Status:	"disconnect",
 					distance:'0 m',
 					direction:'0  °',
+					pjpscatter:'0  °≈ 0 m',
 					pjpmil:'0 mil',
 					vpjpmil:'0  °',
 					hjcmil:'0  °',
@@ -154,6 +159,8 @@
 					if (jdata){
 						app.distance = Number(jdata["distance"]).toFixed(2).toString()  + " m";
 						app.direction = Number(jdata["direction"]).toFixed(2).toString() + "  °";
+						//app.pjpscatter = Number(jdata["pjpscatter"]).toFixed(4).toString()  + " °≈" + Number(Number(jdata["pjpscatter"]).toFixed(4) / Math.PI * Number(jdata["distance"]).toFixed(2)).toFixed(4).toString() + " m";
+						app.pjpscatter = Number(jdata["pjpscatter"]).toFixed(4).toString()  + " °"
 						app.pjpmil = Number(jdata["pjpmil"]).toFixed(2).toString() + " mil";
 						app.vpjpmil = Number(jdata["vpjpmil"]).toFixed(2).toString() + "  °";
 						app.hjcmil = Number(jdata["hjcmil"]).toFixed(2).toString() + "  °";
