@@ -6,6 +6,7 @@
 #include <QSettings>
 #include <QStringList>
 #include <QList>
+#include <commonfunc.h>
 
 class Config
 {

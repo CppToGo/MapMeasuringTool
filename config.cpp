@@ -6,7 +6,9 @@ Config::Config()
   m_config = new QSettings(QCoreApplication::applicationDirPath() +"/config/config.ini", QSettings::IniFormat);
   //迫击炮密位读取
   m_config->beginGroup("PJPMIL");
-  for (int i = MIN_DISTANCE ; i <= MAX_DISTANCE ; i +=5 ){
+  QPoint MinAndMax = getMinAndMax(m_config->allKeys());
+  qDebug()<< MinAndMax ;
+  for (int i = MinAndMax.rx() ; i <= MinAndMax.ry() ; i ++ ){
         if (m_config->value(QString::number(i)).toDouble() > 0 ){
           m_PjpMilList.append(new QPointF(i , m_config->value(QString::number(i)).toDouble() ));
       }
@@ -14,7 +16,9 @@ Config::Config()
   m_config->endGroup();
   //车载迫击炮读取
   m_config->beginGroup("VPJPMIL");
-  for (int i = MIN_DISTANCE ; i <= MAX_DISTANCE ; i +=5 ){
+  MinAndMax = getMinAndMax(m_config->allKeys());
+    qDebug()<< MinAndMax ;
+  for (int i = MinAndMax.rx() ; i <= MinAndMax.ry() ; i ++ ){
         if (m_config->value(QString::number(i)).toDouble() > 0 ){
           m_vPjpMilList.append(new QPointF(i , m_config->value(QString::number(i)).toDouble() ));
       }
@@ -22,7 +26,10 @@ Config::Config()
   m_config->endGroup();
   //多管火箭车密位读取
   m_config->beginGroup("HJCMIL");
-  for (int i = MIN_DISTANCE ; i <= MAX_DISTANCE ; i +=5 ){
+
+  MinAndMax = getMinAndMax(m_config->allKeys());
+    qDebug()<< MinAndMax ;
+  for (int i = MinAndMax.rx() ; i <= MinAndMax.ry() ; i ++ ){
         if (m_config->value(QString::number(i)).toDouble() > 0 ){
           m_HjcMilList.append(new QPointF(i , m_config->value(QString::number(i)).toDouble() ));
       }
@@ -30,7 +37,9 @@ Config::Config()
   m_config->endGroup();
   //煤气罐密位读取（抛射）
   m_config->beginGroup("MQGMIL");
-  for (int i = MIN_DISTANCE ; i <= MAX_DISTANCE ; i ++ ){
+  MinAndMax = getMinAndMax(m_config->allKeys());
+    qDebug()<< MinAndMax ;
+  for (int i = MinAndMax.rx() ; i <= MinAndMax.ry() ; i ++ ){
         if (m_config->value(QString::number(i)).toDouble() > 0 ){
           m_MqgMilList.append(new QPointF(i , m_config->value(QString::number(i)).toDouble() ));
       }
@@ -39,7 +48,9 @@ Config::Config()
 
   //煤气罐密位读取（直射）
   m_config->beginGroup("MQGSMIL");
-  for (int i = MIN_DISTANCE ; i <= MAX_DISTANCE ; i ++ ){
+  MinAndMax = getMinAndMax(m_config->allKeys());
+    qDebug()<< MinAndMax ;
+  for (int i = MinAndMax.rx() ; i <= MinAndMax.ry() ; i ++ ){
         if (m_config->value(QString::number(i)).toDouble() > 0 ){
           m_MqgSMilList.append(new QPointF(i , m_config->value(QString::number(i)).toDouble() ));
       }
@@ -47,7 +58,9 @@ Config::Config()
   m_config->endGroup();
 
   m_config->beginGroup("PJPSCATTER");
-  for (int i = MIN_DISTANCE ; i <= MAX_DISTANCE ; i +=5 ){
+  MinAndMax = getMinAndMax(m_config->allKeys());
+    qDebug()<< MinAndMax ;
+  for (int i = MinAndMax.rx() ; i <= MinAndMax.ry() ; i ++ ){
         if (m_config->value(QString::number(i)).toDouble() > 0 ){
           m_PjpScatterList.append(new QPointF(i , m_config->value(QString::number(i)).toDouble() ));
       }

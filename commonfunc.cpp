@@ -71,3 +71,18 @@ QString getHostIpAddress(){
         strIpAddress = QHostAddress(QHostAddress::LocalHost).toString();
      return strIpAddress;
 }
+
+QPoint getMinAndMax(QStringList list){
+    QPoint out;
+    out.setX(99999);
+    out.setY(0);
+    foreach (QString i , list){
+        if (i.toInt() > out.y()){
+           out.setY(i.toInt());
+        }
+        if (i.toDouble() < out.x()){
+            out.setX(i.toInt());
+        }
+    }
+    return out;
+}
