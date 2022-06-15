@@ -133,6 +133,7 @@
 			if (typeof(WebSocket) === "undefined") {
 				alert("您的浏览器不支持socket")
 			}else{
+				//与服务其的通信地址约定为 ws://xxxxdddd，不能更改
 				var ws = new WebSocket("ws://xxxxdddd");
 				// switch (ws.readyState) {
 				// 	case WebSocket.CONNECTING:
@@ -157,6 +158,15 @@
 					//console.log(event.data)
 					let jdata = JSON.parse(event.data)
 					if (jdata){
+						// 服务器传送的是json数据
+						// distance 为距离，单位m
+						// direction 为方位角
+						// pjpscatter 迫击炮的横向散射角度
+						// pjpmil	迫击炮密位
+						// vpjpmil  车载炮击跑仰角
+						// hjcmil	火箭车仰角
+						// mqgmil   煤气罐抛射仰角
+						// mqgsmil  煤气罐直射仰角
 						app.distance = Number(jdata["distance"]).toFixed(2).toString()  + " m";
 						app.direction = Number(jdata["direction"]).toFixed(2).toString() + "  °";
 						//app.pjpscatter = Number(jdata["pjpscatter"]).toFixed(4).toString()  + " °≈" + Number(Number(jdata["pjpscatter"]).toFixed(4) / Math.PI * Number(jdata["distance"]).toFixed(2)).toFixed(4).toString() + " m";
