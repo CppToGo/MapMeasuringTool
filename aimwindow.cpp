@@ -20,8 +20,8 @@ AimWindow::AimWindow(QWidget *parent) :
     m_config(new Config()),
     m_knn(new KnnOpencv()),
     m_isUsingTool(true),
-    m_AutoStatu_len(true),
-    m_AutoStatu_type(true),
+    m_AutoStatu_len(false),
+    m_AutoStatu_type(false),
     m_Auto_lock(true),
     m_IPAddress(getHostIpAddress())
 {
