@@ -22,7 +22,7 @@ AimWindow::AimWindow(QWidget *parent) :
     m_isUsingTool(true),
     m_AutoStatu_len(true),
     m_AutoStatu_type(true),
-    m_Auto_lock(false),
+    m_Auto_lock(true),
     m_IPAddress(getHostIpAddress())
 {
     ui->setupUi(this);
@@ -340,7 +340,7 @@ void AimWindow::hookClose(){
 void AimWindow::setAlphaValue(){ //设置透明背景
     m_alpha = m_alpha > 0 ? 0 : m_minAlpha;
     m_isUsingTool = !m_isUsingTool ;
-    m_Auto_lock = false ; //解除自动识别锁
+    //m_Auto_lock = false ; //解除自动识别锁
     update();
 }
 
